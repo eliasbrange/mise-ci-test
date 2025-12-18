@@ -1,0 +1,27 @@
+name: Mise
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mise:
+    runs-on: ubuntu-latest
+    env:
+      MISE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install mise
+        run: curl https://mise.run | sh
+
+      - name: Install tools
+        run: mise install
+
+      - name: Add Shims to PATH
+        run: echo "$HOME/.local/share/mise/shims" >> "$GITHUB_PATH"
+
+      - run: |
+          node -v
+          python --version
