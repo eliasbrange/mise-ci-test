@@ -1,4 +1,5 @@
 name: Mise
+
 on:
   push:
     branches:
