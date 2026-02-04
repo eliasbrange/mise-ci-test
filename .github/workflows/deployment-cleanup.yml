@@ -29,7 +29,7 @@ jobs:
               await github.rest.repos.deleteDeployment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                deployment_id: "123",
+                deployment_id: process.env.DEPLOYMENT_ID,
               });
             } catch (error) {
               console.error(error);
