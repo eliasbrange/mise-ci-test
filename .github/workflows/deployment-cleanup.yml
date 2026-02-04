@@ -1,7 +1,7 @@
 name: Deployment Cleanup
 
 on:
-  deployment:
+  deployment_status:
 
 permissions:
   deployments: write
