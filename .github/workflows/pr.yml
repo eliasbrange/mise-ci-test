@@ -18,16 +18,16 @@ jobs:
         with:
           script: |
             const { data } = await github.rest.repos.listDeployments({
-              owner: "${{ github.repository_owner }}",
-              repo: "${{ github.repository }}",
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               environment: 'dev',
-              sha: "${{ github.sha }}",
+              sha: context.sha,
             });
 
             for (const deployment of data) {
               await github.rest.repos.deleteDeployment({
-                owner: "${{ github.repository_owner }}",
-                repo: "${{ github.repository }}",
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 deployment_id: deployment.id,
               });
             }
