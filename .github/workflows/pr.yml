@@ -14,6 +14,10 @@ jobs:
     steps:
       - run: echo "Hello, world!"
 
+  delete-deployments:
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
       - uses: actions/github-script@v7
         with:
           script: |
