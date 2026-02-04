@@ -29,7 +29,10 @@ jobs:
               sha: context.sha,
             });
 
+            console.log(data);
+
             for (const deployment of data) {
+              console.log(deployment.id);
               await github.rest.repos.deleteDeployment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
