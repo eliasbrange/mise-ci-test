@@ -9,6 +9,7 @@ permissions:
 jobs:
   delete-deployments:
     runs-on: ubuntu-latest
+    if: github.event.deployment.environment == 'dev'
     env:
       DEPLOYMENT_ID: ${{ github.event.deployment.id }}
     steps:
