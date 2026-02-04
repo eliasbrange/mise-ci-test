@@ -38,7 +38,15 @@ jobs:
             console.log(data);
 
             for (const deployment of data) {
+
               console.log(deployment.id);
+              await github.rest.repos.createDeploymentStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                deployment_id: deployment.id,
+                state: 'inactive',
+                description: 'Deactivated by cleanup workflow',
+              })
               await github.rest.repos.deleteDeployment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
