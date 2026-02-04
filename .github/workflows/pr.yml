@@ -18,19 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     if: always()
+    env:
+      SHA: ${{ github.event.pull_request.head.sha }}
     steps:
       - uses: actions/github-script@v7
         with:
           script: |
             console.log(context.repo.owner);
             console.log(context.repo.repo);
-            console.log(context.sha);
+            console.log(process.env.SHA);
 
             const { data } = await github.rest.repos.listDeployments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               environment: 'dev',
-              sha: context.sha,
+              sha: process.env.SHA,
             });
 
             console.log(data);
