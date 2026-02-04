@@ -14,42 +14,42 @@ jobs:
     steps:
       - run: echo "Hello, world!"
 
-  delete-deployments:
-    runs-on: ubuntu-latest
-    needs: test
-    if: always()
-    env:
-      SHA: ${{ github.event.pull_request.head.sha }}
-    steps:
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            console.log(context.repo.owner);
-            console.log(context.repo.repo);
-            console.log(process.env.SHA);
+  # delete-deployments:
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   if: always()
+  #   env:
+  #     SHA: ${{ github.event.pull_request.head.sha }}
+  #   steps:
+  #     - uses: actions/github-script@v7
+  #       with:
+  #         script: |
+  #           console.log(context.repo.owner);
+  #           console.log(context.repo.repo);
+  #           console.log(process.env.SHA);
 
-            const { data } = await github.rest.repos.listDeployments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              environment: 'dev',
-              // sha: process.env.SHA,
-            });
+  #           const { data } = await github.rest.repos.listDeployments({
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             environment: 'dev',
+  #             // sha: process.env.SHA,
+  #           });
 
-            console.log(data);
+  #           console.log(data);
 
-            for (const deployment of data) {
+  #           for (const deployment of data) {
 
-              console.log(deployment.id);
-              await github.rest.repos.createDeploymentStatus({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                deployment_id: deployment.id,
-                state: 'inactive',
-                description: 'Deactivated by cleanup workflow',
-              })
-              await github.rest.repos.deleteDeployment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                deployment_id: deployment.id,
-              });
-            }
+  #             console.log(deployment.id);
+  #             await github.rest.repos.createDeploymentStatus({
+  #               owner: context.repo.owner,
+  #               repo: context.repo.repo,
+  #               deployment_id: deployment.id,
+  #               state: 'inactive',
+  #               description: 'Deactivated by cleanup workflow',
+  #             })
+  #             await github.rest.repos.deleteDeployment({
+  #               owner: context.repo.owner,
+  #               repo: context.repo.repo,
+  #               deployment_id: deployment.id,
+  #             });
+  #           }

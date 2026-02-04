@@ -1,0 +1,29 @@
+name: Deployment Cleanup
+
+on:
+  deployment:
+
+permissions:
+  deployments: write
+
+jobs:
+  delete-deployments:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_ID: ${{ github.event.deployment.id }}
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: process.env.DEPLOYMENT_ID,
+              state: 'inactive',
+              description: 'Deactivated by cleanup workflow',
+            })
+            await github.rest.repos.deleteDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: process.env.DEPLOYMENT_ID,
+            });
