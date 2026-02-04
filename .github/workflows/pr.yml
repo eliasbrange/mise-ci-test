@@ -32,7 +32,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               environment: 'dev',
-              sha: process.env.SHA,
+              // sha: process.env.SHA,
             });
 
             console.log(data);
