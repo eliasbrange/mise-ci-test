@@ -4,9 +4,16 @@ on:
   pull_request:
     types: [labeled, opened, synchronize]
 
+permissions:
+  deployments: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        x: [1, 2, 3]
+        y: [a, b, c]
     environment: dev
     steps:
       - run: echo "Hello, world!"
