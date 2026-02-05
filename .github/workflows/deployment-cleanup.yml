@@ -1,4 +1,4 @@
-name: Deployment Cleanup
+name: Dev Deployment Cleanup
 
 on:
   deployment:

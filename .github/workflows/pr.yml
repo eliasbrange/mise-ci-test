@@ -13,17 +13,4 @@ jobs:
     environment: dev
     steps:
       - run: echo "Hello, world!"
-
-  test2:
-    runs-on: ubuntu-latest
-    needs: test
-    environment: staging
-    steps:
-      - run: echo "Hello, world!"
-
-  test3:
-    runs-on: ubuntu-latest
-    needs: test2
-    environment: dev
-    steps:
-      - run: echo "Hello, world!"
+      - run: sleep 30
