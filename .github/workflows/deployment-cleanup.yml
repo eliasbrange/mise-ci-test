@@ -1,7 +1,8 @@
 name: Dev Deployment Cleanup
 
 on:
-  deployment:
+  schedule:
+    - cron: '*/5 * * * *'
 
 permissions:
   deployments: write
@@ -9,28 +10,35 @@ permissions:
 jobs:
   delete-deployments:
     runs-on: ubuntu-latest
-    if: github.event.deployment.environment == 'dev'
-    env:
-      DEPLOYMENT_ID: ${{ github.event.deployment.id }}
     steps:
       - uses: actions/github-script@v7
         with:
           script: |
             try {
-              console.log('Deactivating deployment');
-              await github.rest.repos.createDeploymentStatus({
+              console.log('Listing deployments');
+              const { data } = await github.rest.repos.listDeployments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                deployment_id: process.env.DEPLOYMENT_ID,
-                state: 'inactive',
-                description: 'Deactivated by cleanup workflow',
-              })
-              console.log('Deleting deployment');
-              await github.rest.repos.deleteDeployment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                deployment_id: process.env.DEPLOYMENT_ID,
+                environment: 'dev',
               });
+
+              console.log(`Found ${data.length} deployments`);
+
+              for (const deployment of data) {
+                console.log(`Deactivating deployment ${deployment.id}`);
+                await github.rest.repos.createDeploymentStatus({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: deployment.id,
+                  state: 'inactive',
+                  description: 'Deactivated by cleanup workflow',
+                })
+                console.log(`Deleting deployment ${deployment.id}`);
+                await github.rest.repos.deleteDeployment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: deployment.id,
+                });
             } catch (error) {
               console.error(error);
             }
