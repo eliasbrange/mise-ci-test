@@ -13,4 +13,4 @@ jobs:
     environment: dev
     steps:
       - run: echo "Hello, world!"
-      - run: sleep 30
+      - run: sleep 60
