@@ -16,4 +16,4 @@ jobs:
         y: [a, b, c]
     environment: dev
     steps:
-      - run: echo "Hello, world!"'
+      - run: echo "Hello, world!"
